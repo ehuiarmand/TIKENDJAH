@@ -38,7 +38,8 @@ elif choix == "Ventes":
     if st.button("Enregistrer la vente"):
         prix_vente = produits[produits["Produit"] == produit]["Prix vente"].values[0]
         total = prix_vente * quantite
-        ventes = ventes.append({"Produit": produit, "Quantité": quantite, "Prix total": total, "Mode de paiement": mode}, ignore_index=True)
+        nouvelle_vente = pd.DataFrame([{"Produit": produit, "Quantité": quantite, "Prix total": total, "Mode de paiement": mode}])
+        ventes = pd.concat([ventes, nouvelle_vente], ignore_index=True)
         ventes.to_csv("ventes.csv", index=False)
         st.success("Vente enregistrée !")
 
@@ -55,7 +56,8 @@ elif choix == "Stocks":
 
         if submit:
             stocks = stocks[stocks["Produit"] != produit]
-            stocks = stocks.append({"Produit": produit, "Quantité": quantite, "Prix achat": prix_achat, "Prix vente": prix_vente}, ignore_index=True)
+            nouvelle_ligne = pd.DataFrame([{"Produit": produit, "Quantité": quantite, "Prix achat": prix_achat, "Prix vente": prix_vente}])
+            stocks = pd.concat([stocks, nouvelle_ligne], ignore_index=True)
             stocks.to_csv("stocks.csv", index=False)
             st.success("Stock mis à jour !")
 
@@ -73,7 +75,8 @@ elif choix == "Dépenses":
         submit = st.form_submit_button("Ajouter")
 
         if submit:
-            depenses = depenses.append({"Date": date, "Libellé": libelle, "Catégorie": categorie, "Montant": montant}, ignore_index=True)
+            nouvelle_depense = pd.DataFrame([{"Date": date, "Libellé": libelle, "Catégorie": categorie, "Montant": montant}])
+            depenses = pd.concat([depenses, nouvelle_depense], ignore_index=True)
             depenses.to_csv("depenses.csv", index=False)
             st.success("Dépense enregistrée.")
 
@@ -90,7 +93,8 @@ elif choix == "Salaires":
         submit = st.form_submit_button("Payer")
 
         if submit:
-            salaires = salaires.append({"Employé": employe, "Mois": mois, "Montant": montant}, ignore_index=True)
+            nouvelle_ligne = pd.DataFrame([{"Employé": employe, "Mois": mois, "Montant": montant}])
+            salaires = pd.concat([salaires, nouvelle_ligne], ignore_index=True)
             salaires.to_csv("salaires.csv", index=False)
             st.success("Salaire payé !")
 
